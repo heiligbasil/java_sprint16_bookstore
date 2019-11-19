@@ -13,8 +13,7 @@ import java.lang.annotation.*;
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.TYPE, ElementType.METHOD})
-public @interface Loggable
-{
+public @interface Loggable {
     LogLevel value() default LogLevel.DEBUG;
 
     boolean params() default true;

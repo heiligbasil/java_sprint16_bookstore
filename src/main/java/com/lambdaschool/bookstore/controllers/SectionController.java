@@ -19,39 +19,28 @@ import java.util.List;
 @RestController
 @Loggable
 @RequestMapping("/sections")
-public class SectionController
-{
+public class SectionController {
     private static final Logger logger = LoggerFactory.getLogger(SectionController.class);
 
     @Autowired
     SectionService sectionService;
 
     // http://localhost:2019/sections/sections
-    @GetMapping(value = "/sections",
-                produces = {"application/json"})
-    public ResponseEntity<?> listAllSections(HttpServletRequest request)
-    {
-        logger.trace(request.getMethod()
-                            .toUpperCase() + " " + request.getRequestURI() + " accessed");
+    @GetMapping(value = "/sections", produces = {"application/json"})
+    public ResponseEntity<?> listAllSections(HttpServletRequest request) {
+        logger.trace(request.getMethod().toUpperCase() + " " + request.getRequestURI() + " accessed");
 
         List<Section> mySections = sectionService.findAll();
-        return new ResponseEntity<>(mySections,
-                                    HttpStatus.OK);
+        return new ResponseEntity<>(mySections, HttpStatus.OK);
     }
 
 
     // http://localhost:2019/sections/section/{sectionId}
-    @GetMapping(value = "/section/{sectionId}",
-                produces = {"application/json"})
-    public ResponseEntity<?> getSectionById(HttpServletRequest request,
-                                            @PathVariable
-                                                    Long sectionId)
-    {
-        logger.trace(request.getMethod()
-                            .toUpperCase() + " " + request.getRequestURI() + " accessed");
+    @GetMapping(value = "/section/{sectionId}", produces = {"application/json"})
+    public ResponseEntity<?> getSectionById(HttpServletRequest request, @PathVariable Long sectionId) {
+        logger.trace(request.getMethod().toUpperCase() + " " + request.getRequestURI() + " accessed");
 
         Section s = sectionService.findSectionById(sectionId);
-        return new ResponseEntity<>(s,
-                                    HttpStatus.OK);
+        return new ResponseEntity<>(s, HttpStatus.OK);
     }
 }

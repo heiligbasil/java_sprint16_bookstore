@@ -4,8 +4,7 @@ import com.lambdaschool.bookstore.models.Book;
 
 import java.util.List;
 
-public interface BookService
-{
+public interface BookService {
     List<Book> findAll();
 
     Book findBookById(long id);
@@ -14,14 +13,11 @@ public interface BookService
 
     Book save(Book role);
 
-    Book update(Book role,
-                long id);
+    Book update(Book role, long id);
 
-    void deleteWrote(long bookId,
-                     long authorId);
+    void deleteWrote(long bookId, long authorId);
 
-    void addWrote(long bookId,
-                  long authorId);
+    void addWrote(long bookId, long authorId);
 
 
 }

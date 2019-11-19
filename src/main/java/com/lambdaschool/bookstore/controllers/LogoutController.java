@@ -17,25 +17,19 @@ import javax.servlet.http.HttpServletRequest;
 @Loggable
 @Controller
 @Api(tags = {"LogoutEndpoint"})
-public class LogoutController
-{
+public class LogoutController {
     private static final Logger logger = LoggerFactory.getLogger(LogoutController.class);
     @Autowired
     private TokenStore tokenStore;
 
     @GetMapping(value = {"/oauth/revoke-token", "/logout"})
     @ResponseStatus(HttpStatus.OK)
-    public void logout(HttpServletRequest request)
-    {
-        logger.trace(request.getMethod()
-                            .toUpperCase() + " " + request.getRequestURI() + " accessed");
+    public void logout(HttpServletRequest request) {
+        logger.trace(request.getMethod().toUpperCase() + " " + request.getRequestURI() + " accessed");
 
         String authHeader = request.getHeader("Authorization");
-        if (authHeader != null)
-        {
-            String tokenValue = authHeader.replace("Bearer",
-                                                   "")
-                                          .trim();
+        if (authHeader != null) {
+            String tokenValue = authHeader.replace("Bearer", "").trim();
             OAuth2AccessToken accessToken = tokenStore.readAccessToken(tokenValue);
             tokenStore.removeAccessToken(accessToken);
         }

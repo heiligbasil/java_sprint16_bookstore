@@ -16,8 +16,7 @@ import java.util.List;
 @Loggable
 @Transactional
 @Service(value = "roleService")
-public class RoleServiceImpl implements RoleService
-{
+public class RoleServiceImpl implements RoleService {
     @Autowired
     RoleRepository rolerepos;
 
@@ -28,82 +27,61 @@ public class RoleServiceImpl implements RoleService
     UserAuditing userAuditing;
 
     @Override
-    public List<Role> findAll()
-    {
+    public List<Role> findAll() {
         List<Role> list = new ArrayList<>();
-        rolerepos.findAll()
-                 .iterator()
-                 .forEachRemaining(list::add);
+        rolerepos.findAll().iterator().forEachRemaining(list::add);
         return list;
     }
 
 
     @Override
-    public Role findRoleById(long id)
-    {
-        return rolerepos.findById(id)
-                        .orElseThrow(() -> new ResourceNotFoundException("Role id " + id + " not found!"));
+    public Role findRoleById(long id) {
+        return rolerepos.findById(id).orElseThrow(() -> new ResourceNotFoundException("Role id " + id + " not found!"));
     }
 
     @Override
-    public Role findByName(String name)
-    {
+    public Role findByName(String name) {
         Role rr = rolerepos.findByNameIgnoreCase(name);
 
-        if (rr != null)
-        {
+        if (rr != null) {
             return rr;
-        } else
-        {
+        } else {
             throw new ResourceNotFoundException(name);
         }
     }
 
     @Transactional
     @Override
-    public void delete(long id)
-    {
-        rolerepos.findById(id)
-                 .orElseThrow(() -> new ResourceNotFoundException("Role id " + id + " not found!"));
+    public void delete(long id) {
+        rolerepos.findById(id).orElseThrow(() -> new ResourceNotFoundException("Role id " + id + " not found!"));
         rolerepos.deleteById(id);
     }
 
 
     @Transactional
     @Override
-    public Role update(long id,
-                       Role role)
-    {
-        if (role.getName() == null)
-        {
+    public Role update(long id, Role role) {
+        if (role.getName() == null) {
             throw new ResourceNotFoundException("No role name found to update!");
         }
 
-        if (role.getUserroles()
-                .size() > 0)
-        {
+        if (role.getUserroles().size() > 0) {
             throw new ResourceFoundException("User Roles are not updated through Role. See endpoint POST: users/user/{userid}/role/{roleid}");
         }
 
         Role newRole = findRoleById(id); // see if id exists
 
-        rolerepos.updateRoleName(userAuditing.getCurrentAuditor()
-                                             .get(),
-                                 id,
-                                 role.getName());
+        rolerepos.updateRoleName(userAuditing.getCurrentAuditor().get(), id, role.getName());
         return findRoleById(id);
     }
 
 
     @Transactional
     @Override
-    public Role save(Role role)
-    {
+    public Role save(Role role) {
         Role newRole = new Role();
         newRole.setName(role.getName());
-        if (role.getUserroles()
-                .size() > 0)
-        {
+        if (role.getUserroles().size() > 0) {
             throw new ResourceFoundException("User Roles are not updated through Role. See endpoint POST: users/user/{userid}/role/{roleid}");
         }
 

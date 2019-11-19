@@ -24,51 +24,25 @@ import java.util.Set;
 
 @Component
 @Order(SwaggerPluginSupport.SWAGGER_PLUGIN_ORDER)
-public class SwaggerManualApiPlugin implements ApiListingScannerPlugin
-{
+public class SwaggerManualApiPlugin implements ApiListingScannerPlugin {
     private final CachingOperationNameGenerator operationNames;
 
-    public SwaggerManualApiPlugin(CachingOperationNameGenerator operationNames)
-    {
+    public SwaggerManualApiPlugin(CachingOperationNameGenerator operationNames) {
         this.operationNames = operationNames;
     }
 
     @Override
-    public boolean supports(DocumentationType documentationType)
-    {
+    public boolean supports(DocumentationType documentationType) {
         return DocumentationType.SWAGGER_2.equals(documentationType);
     }
 
     @Override
-    public List<ApiDescription> apply(DocumentationContext documentationContext)
-    {
-        return new ArrayList<>(Arrays.asList(new ApiDescription(null,
-                                                                "/login",
-                                                                "login",
-                                                                Arrays.asList(new OperationBuilder(operationNames).authorizations(new ArrayList<>())
-                                                                                                                  .summary("login")
-                                                                                                                  .codegenMethodNameStem("userLogin")
-                                                                                                                  .method(HttpMethod.POST)
-                                                                                                                  .notes("This is the login endpoint to request an authentication token")
-                                                                                                                  .responseMessages(responseMessages())
-                                                                                                                  .parameters(Arrays.asList(new ParameterBuilder().description("Login Parameter")
-                                                                                                                                                                  .type(new TypeResolver().resolve(UserLogin.class))
-                                                                                                                                                                  .name("userLogin")
-                                                                                                                                                                  .parameterType("body")
-                                                                                                                                                                  .parameterAccess("access")
-                                                                                                                                                                  .required(true)
-                                                                                                                                                                  .modelRef(new ModelRef("UserLogin"))
-                                                                                                                                                                  .build()))
-                                                                                                                  .build()),
-                                                                false)));
+    public List<ApiDescription> apply(DocumentationContext documentationContext) {
+        return new ArrayList<>(Arrays.asList(new ApiDescription(null, "/login", "login", Arrays.asList(new OperationBuilder(operationNames).authorizations(new ArrayList<>()).summary("login").codegenMethodNameStem("userLogin").method(HttpMethod.POST).notes("This is the login endpoint to request an authentication token").responseMessages(responseMessages()).parameters(Arrays.asList(new ParameterBuilder().description("Login Parameter").type(new TypeResolver().resolve(UserLogin.class)).name("userLogin").parameterType("body").parameterAccess("access").required(true).modelRef(new ModelRef("UserLogin")).build())).build()), false)));
 
     }
 
-    private Set<ResponseMessage> responseMessages()
-    {
-        return Set.of(new ResponseMessageBuilder().code(200)
-                                                  .message("OK")
-                                                  .responseModel(new ModelRef("TokenModel"))
-                                                  .build());
+    private Set<ResponseMessage> responseMessages() {
+        return Set.of(new ResponseMessageBuilder().code(200).message("OK").responseModel(new ModelRef("TokenModel")).build());
     }
 }

@@ -19,39 +19,28 @@ import java.util.List;
 @RestController
 @Loggable
 @RequestMapping("/books")
-public class BookController
-{
+public class BookController {
     private static final Logger logger = LoggerFactory.getLogger(BookController.class);
 
     @Autowired
     BookService bookService;
 
     // http://localhost:2019/books/books
-    @GetMapping(value = "/books",
-                produces = {"application/json"})
-    public ResponseEntity<?> listAllBooks(HttpServletRequest request)
-    {
-        logger.trace(request.getMethod()
-                            .toUpperCase() + " " + request.getRequestURI() + " accessed");
+    @GetMapping(value = "/books", produces = {"application/json"})
+    public ResponseEntity<?> listAllBooks(HttpServletRequest request) {
+        logger.trace(request.getMethod().toUpperCase() + " " + request.getRequestURI() + " accessed");
 
         List<Book> myBooks = bookService.findAll();
-        return new ResponseEntity<>(myBooks,
-                                    HttpStatus.OK);
+        return new ResponseEntity<>(myBooks, HttpStatus.OK);
     }
 
 
     // http://localhost:2019/books/book/{bookId}
-    @GetMapping(value = "/book/{bookId}",
-                produces = {"application/json"})
-    public ResponseEntity<?> getBookById(HttpServletRequest request,
-                                         @PathVariable
-                                                 Long bookId)
-    {
-        logger.trace(request.getMethod()
-                            .toUpperCase() + " " + request.getRequestURI() + " accessed");
+    @GetMapping(value = "/book/{bookId}", produces = {"application/json"})
+    public ResponseEntity<?> getBookById(HttpServletRequest request, @PathVariable Long bookId) {
+        logger.trace(request.getMethod().toUpperCase() + " " + request.getRequestURI() + " accessed");
 
         Book s = bookService.findBookById(bookId);
-        return new ResponseEntity<>(s,
-                                    HttpStatus.OK);
+        return new ResponseEntity<>(s, HttpStatus.OK);
     }
 }

@@ -1,6 +1,5 @@
 package com.lambdaschool.bookstore.view;
 
-public interface JustTheCount
-{
+public interface JustTheCount {
     int getCount();
 }

@@ -12,75 +12,54 @@ import java.util.List;
 @Loggable
 @Entity
 @Table(name = "roles")
-@ApiModel(value = "Role",
-          description = "Determines what access the user has")
-public class Role extends Auditable
-{
-    @ApiModelProperty(name = "role id",
-                      value = "primary key for Role",
-                      required = true,
-                      example = "1")
+@ApiModel(value = "Role", description = "Determines what access the user has")
+public class Role extends Auditable {
+    @ApiModelProperty(name = "role id", value = "primary key for Role", required = true, example = "1")
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long roleid;
 
-    @ApiModelProperty(name = "name",
-                      value = "The Name of the Role. This name is hard coded throughout the application so change it with reservations!",
-                      required = true,
-                      example = "DATA")
-    @Column(nullable = false,
-            unique = true)
+    @ApiModelProperty(name = "name", value = "The Name of the Role. This name is hard coded throughout the application so change it with reservations!", required = true, example = "DATA")
+    @Column(nullable = false, unique = true)
     private String name;
 
-    @ApiModelProperty(name = "UserRoles",
-                      value = "A List of the Users who are assigned this role")
-    @OneToMany(mappedBy = "role",
-               cascade = CascadeType.ALL)
+    @ApiModelProperty(name = "UserRoles", value = "A List of the Users who are assigned this role")
+    @OneToMany(mappedBy = "role", cascade = CascadeType.ALL)
     @JsonIgnoreProperties("role")
     private List<UserRoles> userroles = new ArrayList<>();
 
-    public Role()
-    {
+    public Role() {
     }
 
-    public Role(String name)
-    {
+    public Role(String name) {
         this.name = name.toUpperCase();
     }
 
-    public long getRoleid()
-    {
+    public long getRoleid() {
         return roleid;
     }
 
-    public void setRoleid(long roleid)
-    {
+    public void setRoleid(long roleid) {
         this.roleid = roleid;
     }
 
-    public String getName()
-    {
-        if (name == null)
-        {
+    public String getName() {
+        if (name == null) {
             return null;
-        } else
-        {
+        } else {
             return name.toUpperCase();
         }
     }
 
-    public void setName(String name)
-    {
+    public void setName(String name) {
         this.name = name.toUpperCase();
     }
 
-    public List<UserRoles> getUserroles()
-    {
+    public List<UserRoles> getUserroles() {
         return userroles;
     }
 
-    public void setUserroles(List<UserRoles> userroles)
-    {
+    public void setUserroles(List<UserRoles> userroles) {
         this.userroles = userroles;
     }
 

@@ -1,7 +1,6 @@
 package com.lambdaschool.bookstore.view;
 
-public interface UserNameCountEmails
-{
+public interface UserNameCountEmails {
     String getUsernamerpt();
 
     int getCountemails();

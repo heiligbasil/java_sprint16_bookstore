@@ -16,8 +16,7 @@ import java.util.List;
 @Loggable
 @Transactional
 @Service("bookService")
-public class BookServiceImpl implements BookService
-{
+public class BookServiceImpl implements BookService {
     @Autowired
     UserAuditing userAuditing;
 
@@ -31,43 +30,31 @@ public class BookServiceImpl implements BookService
     AuthorRepository authorrepos;
 
     @Override
-    public List<Book> findAll()
-    {
+    public List<Book> findAll() {
         List<Book> list = new ArrayList<>();
-        bookrepos.findAll()
-                 .iterator()
-                 .forEachRemaining(list::add);
+        bookrepos.findAll().iterator().forEachRemaining(list::add);
         return list;
     }
 
     @Override
-    public Book findBookById(long id)
-    {
-        return bookrepos.findById(id)
-                        .orElseThrow(() -> new ResourceNotFoundException("Book with id " + id + " Not Found!"));
+    public Book findBookById(long id) {
+        return bookrepos.findById(id).orElseThrow(() -> new ResourceNotFoundException("Book with id " + id + " Not Found!"));
     }
 
     @Transactional
     @Override
-    public void delete(long id)
-    {
-        if (bookrepos.findById(id)
-                     .isPresent())
-        {
+    public void delete(long id) {
+        if (bookrepos.findById(id).isPresent()) {
             bookrepos.deleteById(id);
-        } else
-        {
+        } else {
             throw new ResourceNotFoundException("Book with id " + id + " Not Found!");
         }
     }
 
     @Transactional
     @Override
-    public Book save(Book book)
-    {
-        if (book.getWrotes()
-                .size() > 0)
-        {
+    public Book save(Book book) {
+        if (book.getWrotes().size() > 0) {
             throw new ResourceFoundException("Wrotes are not added through Book.");
         }
 
@@ -75,10 +62,8 @@ public class BookServiceImpl implements BookService
         newBook.setTitle(book.getTitle());
         newBook.setIsbn(book.getIsbn());
         newBook.setCopy(book.getCopy());
-        if (book.getSection() != null)
-        {
-            newBook.setSection(sectionService.findSectionById(book.getSection()
-                                                                  .getSectionid()));
+        if (book.getSection() != null) {
+            newBook.setSection(sectionService.findSectionById(book.getSection().getSectionid()));
         }
 
         return bookrepos.save(newBook);
@@ -86,35 +71,26 @@ public class BookServiceImpl implements BookService
 
     @Transactional
     @Override
-    public Book update(Book book,
-                       long id)
-    {
-        if (book.getWrotes()
-                .size() > 0)
-        {
+    public Book update(Book book, long id) {
+        if (book.getWrotes().size() > 0) {
             throw new ResourceFoundException("Wrotes are not added through Book.");
         }
 
         Book currentBook = findBookById(id);
-        if (book.getTitle() != null)
-        {
+        if (book.getTitle() != null) {
             currentBook.setTitle(book.getTitle());
         }
 
-        if (book.getIsbn() != null)
-        {
+        if (book.getIsbn() != null) {
             currentBook.setIsbn(book.getIsbn());
         }
 
-        if (book.getCopy() > 0)
-        {
+        if (book.getCopy() > 0) {
             currentBook.setCopy(book.getCopy());
         }
 
-        if (book.getSection() != null)
-        {
-            currentBook.setSection(sectionService.findSectionById(book.getSection()
-                                                                      .getSectionid()));
+        if (book.getSection() != null) {
+            currentBook.setSection(sectionService.findSectionById(book.getSection().getSectionid()));
         }
 
         return bookrepos.save(currentBook);
@@ -122,46 +98,26 @@ public class BookServiceImpl implements BookService
 
     @Transactional
     @Override
-    public void deleteWrote(long bookId,
-                            long authorId)
-    {
-        bookrepos.findById(bookId)
-                 .orElseThrow(() -> new ResourceNotFoundException("Book Id " + bookId + " not found!"));
-        authorrepos.findById(authorId)
-                   .orElseThrow(() -> new ResourceNotFoundException("Book Id " + bookId + " not found!"));
+    public void deleteWrote(long bookId, long authorId) {
+        bookrepos.findById(bookId).orElseThrow(() -> new ResourceNotFoundException("Book Id " + bookId + " not found!"));
+        authorrepos.findById(authorId).orElseThrow(() -> new ResourceNotFoundException("Book Id " + bookId + " not found!"));
 
-        if (bookrepos.checkWrote(bookId,
-                                 authorId)
-                     .getCount() > 0)
-        {
-            bookrepos.deleteWrote(bookId,
-                                  authorId);
-        } else
-        {
+        if (bookrepos.checkWrote(bookId, authorId).getCount() > 0) {
+            bookrepos.deleteWrote(bookId, authorId);
+        } else {
             throw new ResourceFoundException("Book, Author combination does not exists");
         }
     }
 
     @Transactional
     @Override
-    public void addWrote(long bookId,
-                         long authorId)
-    {
-        bookrepos.findById(bookId)
-                 .orElseThrow(() -> new ResourceNotFoundException("Book Id " + bookId + " not found!"));
-        authorrepos.findById(authorId)
-                   .orElseThrow(() -> new ResourceNotFoundException("Book Id " + bookId + " not found!"));
+    public void addWrote(long bookId, long authorId) {
+        bookrepos.findById(bookId).orElseThrow(() -> new ResourceNotFoundException("Book Id " + bookId + " not found!"));
+        authorrepos.findById(authorId).orElseThrow(() -> new ResourceNotFoundException("Book Id " + bookId + " not found!"));
 
-        if (bookrepos.checkWrote(bookId,
-                                 authorId)
-                     .getCount() <= 0)
-        {
-            bookrepos.insertWrote(bookId,
-                                  authorId,
-                                  userAuditing.getCurrentAuditor()
-                                              .get());
-        } else
-        {
+        if (bookrepos.checkWrote(bookId, authorId).getCount() <= 0) {
+            bookrepos.insertWrote(bookId, authorId, userAuditing.getCurrentAuditor().get());
+        } else {
             throw new ResourceFoundException("Book, Author combination already exists");
         }
 

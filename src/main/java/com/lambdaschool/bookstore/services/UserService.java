@@ -6,12 +6,10 @@ import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
-public interface UserService
-{
+public interface UserService {
     List<User> findAll(Pageable pageable);
 
-    List<User> findByNameContaining(String username,
-                                    Pageable pageable);
+    List<User> findByNameContaining(String username, Pageable pageable);
 
     User findUserById(long id);
 
@@ -21,15 +19,11 @@ public interface UserService
 
     User save(User user);
 
-    User update(User user,
-                long id,
-                boolean isAdmin);
+    User update(User user, long id, boolean isAdmin);
 
-    void deleteUserRole(long userid,
-                        long roleid);
+    void deleteUserRole(long userid, long roleid);
 
-    void addUserRole(long userid,
-                     long roleid);
+    void addUserRole(long userid, long roleid);
 
     List<UserNameCountEmails> getCountUserEmails();
 }

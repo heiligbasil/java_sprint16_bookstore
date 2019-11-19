@@ -24,8 +24,7 @@ import java.net.URISyntaxException;
 @RestController
 @Loggable
 @RequestMapping("/data")
-public class DataController
-{
+public class DataController {
     private static final Logger logger = LoggerFactory.getLogger(DataController.class);
 
     @Autowired
@@ -44,63 +43,39 @@ public class DataController
         "lname": "Smith"
     }
     */
-    @PostMapping(value = "/authors",
-                 consumes = {"application/json"})
-    public ResponseEntity<?> addNewAuthor(HttpServletRequest request,
-                                          @Valid
-                                          @RequestBody
-                                                  Author newAuthor) throws URISyntaxException
-    {
-        logger.trace(request.getMethod()
-                            .toUpperCase() + " " + request.getRequestURI() + " accessed");
+    @PostMapping(value = "/authors", consumes = {"application/json"})
+    public ResponseEntity<?> addNewAuthor(HttpServletRequest request, @Valid @RequestBody Author newAuthor) throws URISyntaxException {
+        logger.trace(request.getMethod().toUpperCase() + " " + request.getRequestURI() + " accessed");
 
         newAuthor = authorService.save(newAuthor);
 
         // set the location header for the newly created resource
         HttpHeaders responseHeaders = new HttpHeaders();
-        URI newURI = ServletUriComponentsBuilder.fromCurrentServletMapping()
-                                                    .path("/authors/author/{authorId}")
-                                                    .buildAndExpand(newAuthor.getAuthorid())
-                                                    .toUri();
+        URI newURI = ServletUriComponentsBuilder.fromCurrentServletMapping().path("/authors/author/{authorId}").buildAndExpand(newAuthor.getAuthorid()).toUri();
         responseHeaders.setLocation(newURI);
 
-        return new ResponseEntity<>(null,
-                                    responseHeaders,
-                                    HttpStatus.CREATED);
+        return new ResponseEntity<>(null, responseHeaders, HttpStatus.CREATED);
     }
 
 
     // http://localhost:2019/data/authors/{authorId}
-    @PutMapping(value = "/authors/{authorId}",
-                consumes = {"application/json"})
+    @PutMapping(value = "/authors/{authorId}", consumes = {"application/json"})
     /*
     {
        "fname": "Andrew"
     }
-     */
-    public ResponseEntity<?> updateAuthorById(HttpServletRequest request,
-                                              @RequestBody
-                                                      Author updateAuthor,
-                                              @PathVariable
-                                                      long authorId)
-    {
-        logger.trace(request.getMethod()
-                            .toUpperCase() + " " + request.getRequestURI() + " accessed");
+     */ public ResponseEntity<?> updateAuthorById(HttpServletRequest request, @RequestBody Author updateAuthor, @PathVariable long authorId) {
+        logger.trace(request.getMethod().toUpperCase() + " " + request.getRequestURI() + " accessed");
 
-        authorService.update(updateAuthor,
-                             authorId);
+        authorService.update(updateAuthor, authorId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
 
     // http://localhost:2019/data/authors/{authorId}
     @DeleteMapping(value = "/authors/{authorId}")
-    public ResponseEntity<?> deleteAuthorById(HttpServletRequest request,
-                                              @PathVariable
-                                                      long authorId)
-    {
-        logger.trace(request.getMethod()
-                            .toUpperCase() + " " + request.getRequestURI() + " accessed");
+    public ResponseEntity<?> deleteAuthorById(HttpServletRequest request, @PathVariable long authorId) {
+        logger.trace(request.getMethod().toUpperCase() + " " + request.getRequestURI() + " accessed");
 
         authorService.delete(authorId);
         return new ResponseEntity<>(HttpStatus.OK);
@@ -118,29 +93,18 @@ public class DataController
         }
     }
     */
-    @PostMapping(value = "/books",
-                 consumes = {"application/json"})
-    public ResponseEntity<?> addNewBook(HttpServletRequest request,
-                                        @Valid
-                                        @RequestBody
-                                                Book newBook) throws URISyntaxException
-    {
-        logger.trace(request.getMethod()
-                            .toUpperCase() + " " + request.getRequestURI() + " accessed");
+    @PostMapping(value = "/books", consumes = {"application/json"})
+    public ResponseEntity<?> addNewBook(HttpServletRequest request, @Valid @RequestBody Book newBook) throws URISyntaxException {
+        logger.trace(request.getMethod().toUpperCase() + " " + request.getRequestURI() + " accessed");
 
         newBook = bookService.save(newBook);
 
         // set the location header for the newly created resource
         HttpHeaders responseHeaders = new HttpHeaders();
-        URI newURI = ServletUriComponentsBuilder.fromCurrentServletMapping()
-                                                    .path("/books/book/{bookId}")
-                                                    .buildAndExpand(newBook.getBookid())
-                                                    .toUri();
+        URI newURI = ServletUriComponentsBuilder.fromCurrentServletMapping().path("/books/book/{bookId}").buildAndExpand(newBook.getBookid()).toUri();
         responseHeaders.setLocation(newURI);
 
-        return new ResponseEntity<>(null,
-                                    responseHeaders,
-                                    HttpStatus.CREATED);
+        return new ResponseEntity<>(null, responseHeaders, HttpStatus.CREATED);
     }
 
 
@@ -154,31 +118,19 @@ public class DataController
         }
     }
      */
-    @PutMapping(value = "/books/{bookId}",
-                consumes = {"application/json"})
-    public ResponseEntity<?> updateBookById(HttpServletRequest request,
-                                            @RequestBody
-                                                    Book updateBook,
-                                            @PathVariable
-                                                    long bookId)
-    {
-        logger.trace(request.getMethod()
-                            .toUpperCase() + " " + request.getRequestURI() + " accessed");
+    @PutMapping(value = "/books/{bookId}", consumes = {"application/json"})
+    public ResponseEntity<?> updateBookById(HttpServletRequest request, @RequestBody Book updateBook, @PathVariable long bookId) {
+        logger.trace(request.getMethod().toUpperCase() + " " + request.getRequestURI() + " accessed");
 
-        bookService.update(updateBook,
-                           bookId);
+        bookService.update(updateBook, bookId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
 
     // http://localhost:2019/data/books/{bookId}
     @DeleteMapping(value = "/books/{bookId}")
-    public ResponseEntity<?> deleteBookById(HttpServletRequest request,
-                                            @PathVariable
-                                                    long bookId)
-    {
-        logger.trace(request.getMethod()
-                            .toUpperCase() + " " + request.getRequestURI() + " accessed");
+    public ResponseEntity<?> deleteBookById(HttpServletRequest request, @PathVariable long bookId) {
+        logger.trace(request.getMethod().toUpperCase() + " " + request.getRequestURI() + " accessed");
 
         bookService.delete(bookId);
         return new ResponseEntity<>(HttpStatus.OK);
@@ -186,35 +138,24 @@ public class DataController
 
 
     // http://localhost:2019/data/sections
-    @PostMapping(value = "/sections",
-                 consumes = {"application/json"})
+    @PostMapping(value = "/sections", consumes = {"application/json"})
     /*
     {
         "name":"Current Events"
     }
      */
 
-    public ResponseEntity<?> addNewSection(HttpServletRequest request,
-                                           @Valid
-                                           @RequestBody
-                                                   Section newSection) throws URISyntaxException
-    {
-        logger.trace(request.getMethod()
-                            .toUpperCase() + " " + request.getRequestURI() + " accessed");
+    public ResponseEntity<?> addNewSection(HttpServletRequest request, @Valid @RequestBody Section newSection) throws URISyntaxException {
+        logger.trace(request.getMethod().toUpperCase() + " " + request.getRequestURI() + " accessed");
 
         newSection = sectionService.save(newSection);
 
         // set the location header for the newly created resource
         HttpHeaders responseHeaders = new HttpHeaders();
-        URI newURI = ServletUriComponentsBuilder.fromCurrentServletMapping()
-                                                .path("/sections/section/{sectionId}")
-                                                .buildAndExpand(newSection.getSectionid())
-                                                .toUri();
+        URI newURI = ServletUriComponentsBuilder.fromCurrentServletMapping().path("/sections/section/{sectionId}").buildAndExpand(newSection.getSectionid()).toUri();
         responseHeaders.setLocation(newURI);
 
-        return new ResponseEntity<>(null,
-                                    responseHeaders,
-                                    HttpStatus.CREATED);
+        return new ResponseEntity<>(null, responseHeaders, HttpStatus.CREATED);
     }
 
 
@@ -225,31 +166,19 @@ public class DataController
     }
      */
 
-    @PutMapping(value = "/sections/{sectionId}",
-                consumes = {"application/json"})
-    public ResponseEntity<?> updateSectionById(HttpServletRequest request,
-                                               @RequestBody
-                                                       Section updateSection,
-                                               @PathVariable
-                                                       long sectionId)
-    {
-        logger.trace(request.getMethod()
-                            .toUpperCase() + " " + request.getRequestURI() + " accessed");
+    @PutMapping(value = "/sections/{sectionId}", consumes = {"application/json"})
+    public ResponseEntity<?> updateSectionById(HttpServletRequest request, @RequestBody Section updateSection, @PathVariable long sectionId) {
+        logger.trace(request.getMethod().toUpperCase() + " " + request.getRequestURI() + " accessed");
 
-        sectionService.update(updateSection,
-                              sectionId);
+        sectionService.update(updateSection, sectionId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
 
     // http://localhost:2019/data/sections/{sectionId}
     @DeleteMapping(value = "/sections/{sectionId}")
-    public ResponseEntity<?> deleteSectionById(HttpServletRequest request,
-                                               @PathVariable
-                                                       long sectionId)
-    {
-        logger.trace(request.getMethod()
-                            .toUpperCase() + " " + request.getRequestURI() + " accessed");
+    public ResponseEntity<?> deleteSectionById(HttpServletRequest request, @PathVariable long sectionId) {
+        logger.trace(request.getMethod().toUpperCase() + " " + request.getRequestURI() + " accessed");
 
         sectionService.delete(sectionId);
         return new ResponseEntity<>(HttpStatus.OK);
@@ -258,17 +187,10 @@ public class DataController
 
     // http://localhost:2019/data/books/7/authors/2
     @DeleteMapping(value = "/books/{bookId}/authors/{authorId}")
-    public ResponseEntity<?> deleteWrote(HttpServletRequest request,
-                                         @PathVariable
-                                                 long bookId,
-                                         @PathVariable
-                                                 long authorId)
-    {
-        logger.trace(request.getMethod()
-                            .toUpperCase() + " " + request.getRequestURI() + " accessed");
+    public ResponseEntity<?> deleteWrote(HttpServletRequest request, @PathVariable long bookId, @PathVariable long authorId) {
+        logger.trace(request.getMethod().toUpperCase() + " " + request.getRequestURI() + " accessed");
 
-        bookService.deleteWrote(bookId,
-                                authorId);
+        bookService.deleteWrote(bookId, authorId);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -276,17 +198,10 @@ public class DataController
 
     // http://localhost:2019/data/books/7/authors/2
     @PostMapping(value = "/books/{bookId}/authors/{authorId}")
-    public ResponseEntity<?> addWrote(HttpServletRequest request,
-                                      @PathVariable
-                                              long bookId,
-                                      @PathVariable
-                                              long authorId)
-    {
-        logger.trace(request.getMethod()
-                            .toUpperCase() + " " + request.getRequestURI() + " accessed");
+    public ResponseEntity<?> addWrote(HttpServletRequest request, @PathVariable long bookId, @PathVariable long authorId) {
+        logger.trace(request.getMethod().toUpperCase() + " " + request.getRequestURI() + " accessed");
 
-        bookService.addWrote(bookId,
-                             authorId);
+        bookService.addWrote(bookId, authorId);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }

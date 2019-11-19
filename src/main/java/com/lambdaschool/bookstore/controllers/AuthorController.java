@@ -20,8 +20,7 @@ import java.util.List;
 @RestController
 @Loggable
 @RequestMapping("/authors")
-public class AuthorController
-{
+public class AuthorController {
 
     private static final Logger logger = LoggerFactory.getLogger(AuthorController.class);
 
@@ -29,31 +28,21 @@ public class AuthorController
     AuthorService authorService;
 
     // http://localhost:2019/authors/authors
-    @GetMapping(value = "/authors",
-                produces = {"application/json"})
-    public ResponseEntity<?> listAllAuthors(HttpServletRequest request)
-    {
-        logger.trace(request.getMethod()
-                            .toUpperCase() + " " + request.getRequestURI() + " accessed");
+    @GetMapping(value = "/authors", produces = {"application/json"})
+    public ResponseEntity<?> listAllAuthors(HttpServletRequest request) {
+        logger.trace(request.getMethod().toUpperCase() + " " + request.getRequestURI() + " accessed");
 
         List<Author> myAuthors = authorService.findAll();
-        return new ResponseEntity<>(myAuthors,
-                                    HttpStatus.OK);
+        return new ResponseEntity<>(myAuthors, HttpStatus.OK);
     }
 
 
     // http://localhost:2019/authors/author/{authorId}
-    @GetMapping(value = "/author/{authorId}",
-                produces = {"application/json"})
-    public ResponseEntity<?> getAuthorById(HttpServletRequest request,
-                                           @PathVariable
-                                                   Long authorId)
-    {
-        logger.trace(request.getMethod()
-                            .toUpperCase() + " " + request.getRequestURI() + " accessed");
+    @GetMapping(value = "/author/{authorId}", produces = {"application/json"})
+    public ResponseEntity<?> getAuthorById(HttpServletRequest request, @PathVariable Long authorId) {
+        logger.trace(request.getMethod().toUpperCase() + " " + request.getRequestURI() + " accessed");
 
         Author s = authorService.findAuthorById(authorId);
-        return new ResponseEntity<>(s,
-                                    HttpStatus.OK);
+        return new ResponseEntity<>(s, HttpStatus.OK);
     }
 }

@@ -9,10 +9,8 @@ import java.util.List;
 
 @Loggable
 @Entity
-@Table(name = "author",
-       uniqueConstraints = {@UniqueConstraint(columnNames = {"fname", "lname"})})
-public class Author extends Auditable
-{
+@Table(name = "author", uniqueConstraints = {@UniqueConstraint(columnNames = {"fname", "lname"})})
+public class Author extends Auditable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @JsonIgnoreProperties("authorid")
@@ -21,59 +19,47 @@ public class Author extends Auditable
     private String fname;
     private String lname;
 
-    @OneToMany(mappedBy = "author",
-               cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL)
     @JsonIgnoreProperties("author")
     private List<Wrote> wrotes = new ArrayList<>();
 
-    public Author()
-    {
+    public Author() {
     }
 
-    public Author(String fname,
-                  String lname)
-    {
+    public Author(String fname, String lname) {
         this.fname = fname;
         this.lname = lname;
     }
 
-    public long getAuthorid()
-    {
+    public long getAuthorid() {
         return authorid;
     }
 
-    public void setAuthorid(long authorid)
-    {
+    public void setAuthorid(long authorid) {
         this.authorid = authorid;
     }
 
-    public String getFname()
-    {
+    public String getFname() {
         return fname;
     }
 
-    public void setFname(String fname)
-    {
+    public void setFname(String fname) {
         this.fname = fname;
     }
 
-    public String getLname()
-    {
+    public String getLname() {
         return lname;
     }
 
-    public void setLname(String lname)
-    {
+    public void setLname(String lname) {
         this.lname = lname;
     }
 
-    public List<Wrote> getWrotes()
-    {
+    public List<Wrote> getWrotes() {
         return wrotes;
     }
 
-    public void setWrotes(List<Wrote> wrotes)
-    {
+    public void setWrotes(List<Wrote> wrotes) {
         this.wrotes = wrotes;
     }
 }

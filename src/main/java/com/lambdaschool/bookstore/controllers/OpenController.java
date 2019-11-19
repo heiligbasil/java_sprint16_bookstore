@@ -28,8 +28,7 @@ import java.util.List;
 @Loggable
 @RestController
 @Api(tags = {"OpenEndpoint"})
-public class OpenController
-{
+public class OpenController {
     private static final Logger logger = LoggerFactory.getLogger(OpenController.class);
 
     @Autowired
@@ -49,30 +48,17 @@ public class OpenController
     //     "primaryemail" : "home@local.house"
     // }
 
-    private String getPort(HttpServletRequest httpServletRequest)
-    {
-        if (httpServletRequest.getServerName()
-                              .equalsIgnoreCase("localhost"))
-        {
+    private String getPort(HttpServletRequest httpServletRequest) {
+        if (httpServletRequest.getServerName().equalsIgnoreCase("localhost")) {
             return ":" + httpServletRequest.getLocalPort();
-        } else
-        {
+        } else {
             return "";
         }
     }
 
-    @PostMapping(value = "/createnewuser",
-                 consumes = {"application/json"},
-                 produces = {"application/json"})
-    public ResponseEntity<?> addNewUser(HttpServletRequest httpServletRequest,
-                                        @RequestParam(defaultValue = "true")
-                                                boolean getaccess,
-                                        @Valid
-                                        @RequestBody
-                                                UserMinimum newminuser) throws URISyntaxException
-    {
-        logger.trace(httpServletRequest.getMethod()
-                                       .toUpperCase() + " " + httpServletRequest.getRequestURI() + " accessed");
+    @PostMapping(value = "/createnewuser", consumes = {"application/json"}, produces = {"application/json"})
+    public ResponseEntity<?> addNewUser(HttpServletRequest httpServletRequest, @RequestParam(defaultValue = "true") boolean getaccess, @Valid @RequestBody UserMinimum newminuser) throws URISyntaxException {
+        logger.trace(httpServletRequest.getMethod().toUpperCase() + " " + httpServletRequest.getRequestURI() + " accessed");
 
         // Create the user
         User newuser = new User();
@@ -82,22 +68,18 @@ public class OpenController
         newuser.setPrimaryemail(newminuser.getPrimaryemail());
 
         ArrayList<UserRoles> newRoles = new ArrayList<>();
-        newRoles.add(new UserRoles(newuser,
-                                   roleService.findByName("user")));
+        newRoles.add(new UserRoles(newuser, roleService.findByName("user")));
         newuser.setUserroles(newRoles);
 
         newuser = userService.save(newuser);
 
         // set the location header for the newly created resource - to another controller!
         HttpHeaders responseHeaders = new HttpHeaders();
-        URI newUserURI = ServletUriComponentsBuilder.fromUriString(httpServletRequest.getServerName() + ":" + httpServletRequest.getLocalPort() + "/users/user/{userId}")
-                                                    .buildAndExpand(newuser.getUserid())
-                                                    .toUri();
+        URI newUserURI = ServletUriComponentsBuilder.fromUriString(httpServletRequest.getServerName() + ":" + httpServletRequest.getLocalPort() + "/users/user/{userId}").buildAndExpand(newuser.getUserid()).toUri();
         responseHeaders.setLocation(newUserURI);
 
         String theToken = "";
-        if (getaccess)
-        {
+        if (getaccess) {
             // return the access token
             RestTemplate restTemplate = new RestTemplate();
             String requestURI = "http://" + httpServletRequest.getServerName() + getPort(httpServletRequest) + "/login";
@@ -108,38 +90,26 @@ public class OpenController
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
             headers.setAccept(acceptableMediaTypes);
-            headers.setBasicAuth(System.getenv("OAUTHCLIENTID"),
-                                 System.getenv("OAUTHCLIENTSECRET"));
+            headers.setBasicAuth(System.getenv("OAUTHCLIENTID"), System.getenv("OAUTHCLIENTSECRET"));
 
             MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
-            map.add("grant_type",
-                    "password");
-            map.add("scope",
-                    "read write trust");
-            map.add("username",
-                    newminuser.getUsername());
-            map.add("password",
-                    newminuser.getPassword());
+            map.add("grant_type", "password");
+            map.add("scope", "read write trust");
+            map.add("username", newminuser.getUsername());
+            map.add("password", newminuser.getPassword());
 
-            HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(map,
-                                                                                 headers);
+            HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(map, headers);
 
-            theToken = restTemplate.postForObject(requestURI,
-                                                  request,
-                                                  String.class);
-        } else
-        {
+            theToken = restTemplate.postForObject(requestURI, request, String.class);
+        } else {
             // nothing;
         }
-        return new ResponseEntity<>(theToken,
-                                    responseHeaders,
-                                    HttpStatus.CREATED);
+        return new ResponseEntity<>(theToken, responseHeaders, HttpStatus.CREATED);
     }
 
     @ApiIgnore
     @GetMapping("favicon.ico")
-    void returnNoFavicon()
-    {
+    void returnNoFavicon() {
         logger.trace("favicon.ico endpoint accessed!");
     }
 }

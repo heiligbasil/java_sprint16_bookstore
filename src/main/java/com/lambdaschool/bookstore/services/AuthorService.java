@@ -4,8 +4,7 @@ import com.lambdaschool.bookstore.models.Author;
 
 import java.util.List;
 
-public interface AuthorService
-{
+public interface AuthorService {
     List<Author> findAll();
 
     Author findAuthorById(long id);
@@ -14,6 +13,5 @@ public interface AuthorService
 
     Author save(Author role);
 
-    Author update(Author role,
-                  long id);
+    Author update(Author role, long id);
 }

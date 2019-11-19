@@ -15,56 +15,42 @@ import java.util.List;
 @Loggable
 @Transactional
 @Service("sectionService")
-public class SectionServiceImpl implements SectionService
-{
+public class SectionServiceImpl implements SectionService {
     @Autowired
     SectionRepository sectionrepos;
 
     @Override
-    public List<Section> findAll()
-    {
+    public List<Section> findAll() {
         List<Section> list = new ArrayList<>();
-        sectionrepos.findAll()
-                    .iterator()
-                    .forEachRemaining(list::add);
+        sectionrepos.findAll().iterator().forEachRemaining(list::add);
         return list;
 
     }
 
     @Override
-    public Section findSectionById(long id)
-    {
-        return sectionrepos.findById(id)
-                           .orElseThrow(() -> new ResourceNotFoundException("Section with id " + id + " Not Found!"));
+    public Section findSectionById(long id) {
+        return sectionrepos.findById(id).orElseThrow(() -> new ResourceNotFoundException("Section with id " + id + " Not Found!"));
     }
 
     @Transactional
     @Override
-    public void delete(long id)
-    {
+    public void delete(long id) {
         Section goodbyeSection = findSectionById(id);
-        if (goodbyeSection != null)
-        {
-            if (goodbyeSection.getBooks().size() > 0)
-            {
+        if (goodbyeSection != null) {
+            if (goodbyeSection.getBooks().size() > 0) {
                 throw new ResourceFoundException("Sections containing books cannot be deleted. Move the books to a new section first");
-            } else
-            {
+            } else {
                 sectionrepos.deleteById(id);
             }
-        } else
-        {
+        } else {
             throw new ResourceNotFoundException("Section with id " + id + " Not Found!");
         }
     }
 
     @Transactional
     @Override
-    public Section save(Section section)
-    {
-        if (section.getBooks()
-                   .size() > 0)
-        {
+    public Section save(Section section) {
+        if (section.getBooks().size() > 0) {
             throw new ResourceFoundException("Book are not added through sections.");
         }
 
@@ -77,19 +63,14 @@ public class SectionServiceImpl implements SectionService
 
     @Transactional
     @Override
-    public Section update(Section section,
-                          long id)
-    {
+    public Section update(Section section, long id) {
         Section currentSection = findSectionById(id);
 
-        if (section.getBooks()
-                   .size() > 0)
-        {
+        if (section.getBooks().size() > 0) {
             throw new ResourceFoundException("Book are not updated through sections.");
         }
 
-        if (section.getName() != null)
-        {
+        if (section.getName() != null) {
             currentSection.setName(section.getName());
         }
 

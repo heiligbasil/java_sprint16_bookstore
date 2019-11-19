@@ -23,54 +23,37 @@ import java.util.List;
 @RequestMapping("/roles")
 @Loggable
 @Api(tags = {"RolesEndpoints"})
-public class RolesController
-{
+public class RolesController {
     private static final Logger logger = LoggerFactory.getLogger(RolesController.class);
 
     @Autowired
     RoleService roleService;
 
     // http://localhost:2019/roles/roles
-    @GetMapping(value = "/roles",
-                produces = {"application/json"})
-    public ResponseEntity<?> listRoles(HttpServletRequest request)
-    {
-        logger.trace(request.getMethod()
-                            .toUpperCase() + " " + request.getRequestURI() + " accessed");
+    @GetMapping(value = "/roles", produces = {"application/json"})
+    public ResponseEntity<?> listRoles(HttpServletRequest request) {
+        logger.trace(request.getMethod().toUpperCase() + " " + request.getRequestURI() + " accessed");
 
         List<Role> allRoles = roleService.findAll();
-        return new ResponseEntity<>(allRoles,
-                                    HttpStatus.OK);
+        return new ResponseEntity<>(allRoles, HttpStatus.OK);
     }
 
     // http://localhost:2019/roles/role/3
-    @GetMapping(value = "/role/{roleId}",
-                produces = {"application/json"})
-    public ResponseEntity<?> getRoleById(HttpServletRequest request,
-                                         @PathVariable
-                                                 Long roleId)
-    {
-        logger.trace(request.getMethod()
-                            .toUpperCase() + " " + request.getRequestURI() + " accessed");
+    @GetMapping(value = "/role/{roleId}", produces = {"application/json"})
+    public ResponseEntity<?> getRoleById(HttpServletRequest request, @PathVariable Long roleId) {
+        logger.trace(request.getMethod().toUpperCase() + " " + request.getRequestURI() + " accessed");
 
         Role r = roleService.findRoleById(roleId);
-        return new ResponseEntity<>(r,
-                                    HttpStatus.OK);
+        return new ResponseEntity<>(r, HttpStatus.OK);
     }
 
     // http://localhost:2019/roles/role/name/data
-    @GetMapping(value = "/role/name/{roleName}",
-                produces = {"application/json"})
-    public ResponseEntity<?> getRoleByName(HttpServletRequest request,
-                                           @PathVariable
-                                                   String roleName)
-    {
-        logger.trace(request.getMethod()
-                            .toUpperCase() + " " + request.getRequestURI() + " accessed");
+    @GetMapping(value = "/role/name/{roleName}", produces = {"application/json"})
+    public ResponseEntity<?> getRoleByName(HttpServletRequest request, @PathVariable String roleName) {
+        logger.trace(request.getMethod().toUpperCase() + " " + request.getRequestURI() + " accessed");
 
         Role r = roleService.findByName(roleName);
-        return new ResponseEntity<>(r,
-                                    HttpStatus.OK);
+        return new ResponseEntity<>(r, HttpStatus.OK);
     }
 
     // http://localhost:2019/roles/role
@@ -79,29 +62,18 @@ public class RolesController
             "name" : "ANewRole"
         }
     */
-    @PostMapping(value = "/role",
-                 consumes = {"application/json"})
-    public ResponseEntity<?> addNewRole(HttpServletRequest request,
-                                        @Valid
-                                        @RequestBody
-                                                Role newRole) throws URISyntaxException
-    {
-        logger.trace(request.getMethod()
-                            .toUpperCase() + " " + request.getRequestURI() + " accessed");
+    @PostMapping(value = "/role", consumes = {"application/json"})
+    public ResponseEntity<?> addNewRole(HttpServletRequest request, @Valid @RequestBody Role newRole) throws URISyntaxException {
+        logger.trace(request.getMethod().toUpperCase() + " " + request.getRequestURI() + " accessed");
 
         newRole = roleService.save(newRole);
 
         // set the location header for the newly created resource
         HttpHeaders responseHeaders = new HttpHeaders();
-        URI newRoleURI = ServletUriComponentsBuilder.fromCurrentRequest()
-                                                    .path("/{roleid}")
-                                                    .buildAndExpand(newRole.getRoleid())
-                                                    .toUri();
+        URI newRoleURI = ServletUriComponentsBuilder.fromCurrentRequest().path("/{roleid}").buildAndExpand(newRole.getRoleid()).toUri();
         responseHeaders.setLocation(newRoleURI);
 
-        return new ResponseEntity<>(null,
-                                    responseHeaders,
-                                    HttpStatus.CREATED);
+        return new ResponseEntity<>(null, responseHeaders, HttpStatus.CREATED);
     }
 
 
@@ -111,32 +83,19 @@ public class RolesController
             "name" : "ANewRole"
         }
      */
-    @PutMapping(value = "/role/{roleid}",
-                consumes = {"application/json"})
-    public ResponseEntity<?> addNewRole(HttpServletRequest request,
-                                        @PathVariable
-                                                long roleid,
-                                        @Valid
-                                        @RequestBody
-                                                Role newRole) throws URISyntaxException
-    {
-        logger.trace(request.getMethod()
-                            .toUpperCase() + " " + request.getRequestURI() + " accessed");
+    @PutMapping(value = "/role/{roleid}", consumes = {"application/json"})
+    public ResponseEntity<?> addNewRole(HttpServletRequest request, @PathVariable long roleid, @Valid @RequestBody Role newRole) throws URISyntaxException {
+        logger.trace(request.getMethod().toUpperCase() + " " + request.getRequestURI() + " accessed");
 
-        newRole = roleService.update(roleid,
-                                     newRole);
+        newRole = roleService.update(roleid, newRole);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
 
     // localhost:2019/roles/role/3
     @DeleteMapping(value = "/role/{id}")
-    public ResponseEntity<?> deleteRoleById(HttpServletRequest request,
-                                            @PathVariable
-                                                    long id)
-    {
-        logger.trace(request.getMethod()
-                            .toUpperCase() + " " + request.getRequestURI() + " accessed");
+    public ResponseEntity<?> deleteRoleById(HttpServletRequest request, @PathVariable long id) {
+        logger.trace(request.getMethod().toUpperCase() + " " + request.getRequestURI() + " accessed");
 
         roleService.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);

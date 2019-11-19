@@ -15,49 +15,36 @@ import java.util.List;
 @Loggable
 @Transactional
 @Service("authorService")
-public class AuthorServiceImpl implements AuthorService
-{
+public class AuthorServiceImpl implements AuthorService {
     @Autowired
     AuthorRepository authorrespos;
 
     @Override
-    public List<Author> findAll()
-    {
+    public List<Author> findAll() {
         List<Author> list = new ArrayList<>();
-        authorrespos.findAll()
-                    .iterator()
-                    .forEachRemaining(list::add);
+        authorrespos.findAll().iterator().forEachRemaining(list::add);
         return list;
     }
 
     @Override
-    public Author findAuthorById(long id)
-    {
-        return authorrespos.findById(id)
-                           .orElseThrow(() -> new ResourceNotFoundException("Author with id " + id + " Not Found!"));
+    public Author findAuthorById(long id) {
+        return authorrespos.findById(id).orElseThrow(() -> new ResourceNotFoundException("Author with id " + id + " Not Found!"));
     }
 
     @Transactional
     @Override
-    public void delete(long id)
-    {
-        if (authorrespos.findById(id)
-                        .isPresent())
-        {
+    public void delete(long id) {
+        if (authorrespos.findById(id).isPresent()) {
             authorrespos.deleteById(id);
-        } else
-        {
+        } else {
             throw new ResourceNotFoundException("Author with id " + id + " Not Found!");
         }
     }
 
     @Transactional
     @Override
-    public Author save(Author author)
-    {
-        if (author.getWrotes()
-                  .size() > 0)
-        {
+    public Author save(Author author) {
+        if (author.getWrotes().size() > 0) {
             throw new ResourceFoundException("Wrotes are not added through Author.");
         }
 
@@ -70,23 +57,17 @@ public class AuthorServiceImpl implements AuthorService
 
     @Transactional
     @Override
-    public Author update(Author author,
-                         long id)
-    {
+    public Author update(Author author, long id) {
         Author currentAuthor = findAuthorById(id);
-        if (author.getWrotes()
-                  .size() > 0)
-        {
+        if (author.getWrotes().size() > 0) {
             throw new ResourceFoundException("Wrotes are not updated through Author.");
         }
 
-        if (author.getFname() != null)
-        {
+        if (author.getFname() != null) {
             currentAuthor.setFname(author.getFname());
         }
 
-        if (author.getLname() != null)
-        {
+        if (author.getLname() != null) {
             currentAuthor.setLname(author.getLname());
         }
         return authorrespos.save(currentAuthor);

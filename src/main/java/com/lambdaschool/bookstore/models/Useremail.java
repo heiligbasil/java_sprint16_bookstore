@@ -9,12 +9,9 @@ import javax.validation.constraints.Email;
 
 @Loggable
 @Entity
-@Table(name = "useremails",
-       uniqueConstraints = {@UniqueConstraint(columnNames = {"userid", "useremail"})})
-@ApiModel(value = "Useremail",
-          description = "A list of secondary emails for the user")
-public class Useremail extends Auditable
-{
+@Table(name = "useremails", uniqueConstraints = {@UniqueConstraint(columnNames = {"userid", "useremail"})})
+@ApiModel(value = "Useremail", description = "A list of secondary emails for the user")
+public class Useremail extends Auditable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long useremailid;
@@ -24,55 +21,44 @@ public class Useremail extends Auditable
     private String useremail;
 
     @ManyToOne
-    @JoinColumn(name = "userid",
-                nullable = false)
+    @JoinColumn(name = "userid", nullable = false)
     @JsonIgnoreProperties("useremails")
     private User user;
 
-    public Useremail()
-    {
+    public Useremail() {
     }
 
-    public Useremail(User user,
-                     String useremail)
-    {
+    public Useremail(User user, String useremail) {
         this.useremail = useremail;
         this.user = user;
     }
 
-    public long getUseremailid()
-    {
+    public long getUseremailid() {
         return useremailid;
     }
 
-    public void setUseremailid(long useremailid)
-    {
+    public void setUseremailid(long useremailid) {
         this.useremailid = useremailid;
     }
 
-    public String getUseremail()
-    {
+    public String getUseremail() {
         if (useremail == null) // this is possible when updating a user
         {
             return null;
-        } else
-        {
+        } else {
             return useremail.toLowerCase();
         }
     }
 
-    public void setUseremail(String useremail)
-    {
+    public void setUseremail(String useremail) {
         this.useremail = useremail.toLowerCase();
     }
 
-    public User getUser()
-    {
+    public User getUser() {
         return user;
     }
 
-    public void setUser(User user)
-    {
+    public void setUser(User user) {
         this.user = user;
     }
 }
